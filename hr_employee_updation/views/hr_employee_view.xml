@@ -88,6 +88,32 @@
                 </xpath>
             </field>
         </record>
+		
+		
+		
+		<record id="tickets_hr_employee_view_form" model="ir.ui.view">
+            <field name="name">hr.employee.tickets.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='hr_settings']" position="after">
+                    <page name="tickets_info" string="Ticket Information">
+                        <field name="ticket_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="ticket_type"/>
+                                <field name="ticket_reg_date"/>
+                                <field name="ticket_airline"/>
+                                <field name="ticket_class"/>
+                                <field name="ticket_number"/>
+                                <field name="ticket_price"/>
+                                <field name="ticket_cost"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
 
     </data>
 </odoo>

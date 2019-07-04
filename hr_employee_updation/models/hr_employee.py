@@ -106,6 +106,7 @@ class HrEmployee(models.Model):
     fam_ids = fields.One2many('hr.employee.family', 'employee_id', string='Family', help='Family Information')
     emergency_contacts = fields.One2many('hr.emergency.contact', 'employee_obj', string='Emergency Contact')
     ticket_ids=fields.One2many('hr.employee.tickets','employee_id',string='Tickets',help='Tickets Information')
+	
 class hr_employee_tickets(models.Model):
     _name="hr.employee.tickets"
     _description="Table For Employee Tickets data"
@@ -113,7 +114,7 @@ class hr_employee_tickets(models.Model):
     ticket_reg_date=fields.Datetime(string="Date Of Register",default=datetime.now())
     ticket_airline=fields.Char("Ticket Airline")
     ticket_class=fields.Selection([('economy','Economy'),('first','First Class'),
-                                   ('business','Business Class'),('hospitality','Hospitality')],
+                                   ('business','Business Class'),('Guest','Guest')],
                                   default='economy',string="Ticket Class")
     ticket_number=fields.Integer("Ticket Number")
     @api.one

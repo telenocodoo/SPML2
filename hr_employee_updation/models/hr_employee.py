@@ -22,8 +22,7 @@
 ###################################################################################
 from datetime import datetime, timedelta, date
 
-# from calverter import Calverter
-from custom.addons.hr_employee_updation.models.calverter import Calverter
+from odoo import calverter
 from odoo import models, fields, api, _
 
 
@@ -120,10 +119,11 @@ class HrEmployee(models.Model):
                                               help='You can attach the copy of Passport')
     fam_ids = fields.One2many('hr.employee.family', 'employee_id', string='Family', help='Family Information')
     emergency_contacts = fields.One2many('hr.emergency.contact', 'employee_obj', string='Emergency Contact')
+    ticket_ids = fields.One2many('hr.employee.tickets', 'employee_id', string='Tickets', help='Tickets Information')
 
     @api.depends('id_expiry_date')
     def _calculate_id_hajri(self):
-        cal = Calverter()
+        cal = calverter.Calverter()
         if self.id_expiry_date:
             d = self.id_expiry_date
 
@@ -137,7 +137,7 @@ class HrEmployee(models.Model):
 
     @api.depends('passport_expiry_date')
     def _calculate_passport_hajri(self):
-        cal = Calverter()
+        cal = calverter.Calverter()
         if self.passport_expiry_date:
             d = self.passport_expiry_date
 
@@ -148,4 +148,38 @@ class HrEmployee(models.Model):
             hj = cal.jd_to_islamic(jd)
             # print(hj[0], "/", hj[1], "/", hj[2])
             self.passport_expiry_date_hajri = str(hj[2]) + "/" + str(hj[1])+ "/" + str(hj[0])
+			
+
+
+
+class hr_employee_tickets(models.Model):
+    _name = "hr.employee.tickets"
+    _description = "Table For Employee Tickets data"
+    ticket_type = fields.Selection([('single', 'Single'), ('family', 'Family')], string="Ticket Type")
+    ticket_reg_date = fields.Datetime(string="Date Of Register", default=datetime.now())
+    ticket_airline = fields.Char("Ticket Airline")
+    ticket_class = fields.Selection([('economy', 'Economy'), ('first', 'First Class'),
+                                     ('business', 'Business Class'), ('Guest', 'Guest')],
+                                    default='economy', string="Ticket Class")
+    ticket_number = fields.Integer("Ticket Number")
+
+    @api.one
+    @api.constrains("ticket_number")
+    def _change_num(self):
+        if self.ticket_type == 'single' and self.ticket_number > 1:
+            raise ValidationError("Ticket Number Must Be 1")
+
+    ticket_price = fields.Float("Price For One Ticket")
+    ticket_cost = fields.Float("Total Cost For Tickets", store=True, readonly=True, compute="_calc_tickets_cost")
+
+    @api.one
+    @api.depends("ticket_price", "ticket_number")
+    def _calc_tickets_cost(self):
+        if self.ticket_number or self.ticket_price:
+            self.ticket_cost = self.ticket_price * self.ticket_number
+
+    employee_id = fields.Many2one('hr.employee', string="Employees")
+
+
+
 

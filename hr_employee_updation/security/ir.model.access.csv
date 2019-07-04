@@ -5,3 +5,6 @@
 "access_hr_employee_emergency_contact","hr.emergency.contact","model_hr_emergency_contact","base.group_user",1,0,0,0
 "access_hr_employee_emergency_contact_manager","hr.emergency.contact","model_hr_emergency_contact","hr.group_hr_manager",1,1,1,1
 "access_hr_employee_emergency_contact_user","hr.emergency.contact","model_hr_emergency_contact","hr.group_hr_user",1,1,1,1
+"access_hr_employee_ticket_employee","hr.employee.tickets_employee","model_hr_employee_tickets","base.group_user",1,0,0,0
+"access_hr_employee_ticket_manager","hr.employee.tickets_manager","model_hr_employee_tickets","hr.group_hr_manager",1,1,1,1
+"access_hr_employee_ticket_user","hr.employee.tickets_user","model_hr_employee_tickets","hr.group_hr_user",1,1,1,1
